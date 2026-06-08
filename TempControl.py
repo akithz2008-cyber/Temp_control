@@ -1,0 +1,3 @@
+from tkinter import *
+ABS_ZERO_CELSIUS = -273.15
+ABS_ZERO_FAHRENHEIT = -459.67
