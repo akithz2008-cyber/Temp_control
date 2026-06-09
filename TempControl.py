@@ -1,44 +1,64 @@
 import tkinter as tk
 from tkinter import END
+
+
+FONT_MAIN_TITLE = "Verdana 16 bold"
+FONT_HEADING = "Verdana 12 bold"
+FONT_DEFAULT = "Verdana 12"
+
+COLOR_YELLOW = "#FFFF00"
+COLOR_PINK = "#FFC0CB"
+COLOR_ERROR = "red"
+COLOR_TEXT = "black"
+
+
 ABS_ZERO_CELSIUS = -273.15
 ABS_ZERO_FAHRENHEIT = -459.67
 
 
+
 class TemperatureConverter:
+    """
+    Handles all conversion mathematics and string formatting validations.
+    This class contains absolutely NO Tkinter code.
+    """
 
     def calculate_to_c(self, f_string):
         """Converts Fahrenheit string input to Celsius."""
-        
+        # 1. Check if input is a valid number
         try:
             f_val = float(f_string)
         except ValueError:
             return "Please enter a number"
 
-
+        # 2. Check against absolute zero
         if f_val < ABS_ZERO_FAHRENHEIT:
             return "Temperature too low"
 
+        # 3. Calculate and format response
         c_val = (f_val - 32) * 5 / 9
         return f"{c_val:.1f} degrees Centigrade"
-    
+
     def calculate_to_f(self, c_string):
         """Converts Celsius string input to Fahrenheit."""
-     
+        # 1. Check if input is a valid number
         try:
             c_val = float(c_string)
         except ValueError:
             return "Please enter a number"
 
-  
+        # 2. Check against absolute zero
         if c_val < ABS_ZERO_CELSIUS:
             return "Temperature too low"
 
- 
+        # 3. Calculate and format response
         f_val = (c_val * 9 / 5) + 32
         return f"{f_val:.1f} degrees Fahrenheit"
-    
-class ConverterGUI:
 
+
+
+class ConverterGUI:
+    """Sets up the GUI layout, frame switching, and widget behaviors."""
 
     def __init__(self, root):
 
@@ -59,9 +79,10 @@ class ConverterGUI:
         self.container.rowconfigure(0, weight=1)
         self.container.columnconfigure(0, weight=1)
 
+
         self.frames = {}
 
-    
+
         self.frames["MainFrame"] = self.create_main_frame()
         self.frames["to_cFrame"] = self.create_to_c_frame()
         self.frames["to_fFrame"] = self.create_to_f_frame()
@@ -74,24 +95,24 @@ class ConverterGUI:
         frame = self.frames[name]
         frame.tkraise()
 
-    # --- Home Screen Frame Generator ---
+
     def create_main_frame(self):
         frame = tk.Frame(self.container)
         frame.grid(row=0, column=0, sticky="nsew")
 
-        # Configure grid distribution
+
         frame.rowconfigure(0, weight=1)
         frame.rowconfigure(1, weight=1)
         frame.columnconfigure(0, weight=1)
         frame.columnconfigure(1, weight=1)
 
-        # Title Label
+
         lbl_title = tk.Label(
             frame, text="Temperature Converter", font=FONT_MAIN_TITLE
         )
         lbl_title.grid(row=0, column=0, columnspan=2, pady=10)
 
-        # Yellow Navigation Button (Goes to Fahrenheit -> Celsius screen)
+
         btn_to_c = tk.Button(
             frame,
             text="to Centigrade",
@@ -101,7 +122,7 @@ class ConverterGUI:
         )
         btn_to_c.grid(row=1, column=0, padx=10, pady=15, sticky="nsew")
 
-        # Pink Navigation Button (Goes to Celsius -> Fahrenheit screen)
+
         btn_to_f = tk.Button(
             frame,
             text="to Fahrenheit",
@@ -113,12 +134,12 @@ class ConverterGUI:
 
         return frame
 
-    # --- Fahrenheit to Centigrade Frame Generator ---
+
     def create_to_c_frame(self):
         frame = tk.Frame(self.container)
         frame.grid(row=0, column=0, sticky="nsew")
 
-        # Establish layout rows and columns configurations
+
         for r in range(4):
             frame.rowconfigure(r, weight=1)
         for c in range(3):
@@ -167,12 +188,12 @@ class ConverterGUI:
 
         return frame
 
-    # --- Centigrade to Fahrenheit Frame Generator ---
+
     def create_to_f_frame(self):
         frame = tk.Frame(self.container)
         frame.grid(row=0, column=0, sticky="nsew")
 
-        # Establish layout rows and columns configurations
+
         for r in range(4):
             frame.rowconfigure(r, weight=1)
         for c in range(3):
@@ -222,15 +243,12 @@ class ConverterGUI:
         return frame
 
 
-# ==========================================
-# Step 4 & 5: Calculation and Reset logic bindings
-# ==========================================
     def to_centigrade(self):
         """Passes data to logic class and displays Fahrenheit -> Celsius conversion."""
         raw_input = self.temp_entry_c.get()
         result = self.converter.calculate_to_c(raw_input)
 
-        # Responsive styling: Color errors red, clean calculations black
+
         if "degrees" in result:
             self.result_c_label.configure(text=result, fg=COLOR_TEXT)
         else:
@@ -241,7 +259,7 @@ class ConverterGUI:
         raw_input = self.temp_entry_f.get()
         result = self.converter.calculate_to_f(raw_input)
 
-        # Responsive styling: Color errors red, clean calculations black
+
         if "degrees" in result:
             self.result_f_label.configure(text=result, fg=COLOR_TEXT)
         else:
@@ -253,8 +271,8 @@ class ConverterGUI:
         label.configure(text="Converted temperature goes here", fg=COLOR_TEXT)
 
 
-# --- Application Run Initialization ---
+
 if __name__ == "__main__":
     window = tk.Tk()
     app = ConverterGUI(window)
-    window.mainloop()       
+    window.mainloop()
